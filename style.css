@@ -15,16 +15,17 @@ body {
     align-items: center;
 }
 
-h1 {
+.title {
     margin-top: 0;
+    margin-bottom: 0;
+    opacity: 1;
+    transition: opacity 0.5s ease;
 }
 
-.top, 
-.middle, 
-.indicator {
-    text-align: center;
-    position: relative;
+.has-results .title {
+    opacity: 0;
 }
+
 input {
     background-color: transparent;
     border: none;
@@ -32,6 +33,35 @@ input {
     padding: 0;
     color: #FFFFFF;
     text-align: center;
+}
+
+.top,
+.middle,
+.indicators {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.middle .images,
+.middle input,
+.top .title, 
+.top .search-clear,
+.indicators .spinner,
+.indicators .search-hint {
+    grid-area: 1/1;
+}
+
+.images {
+    display: grid;
+    place-items: center;
+}
+.images img {
+    grid-area: 1/1;
+    max-width: 500px;
+    max-height: 500px;
+    display: block;
 }
 
 .search-input {
@@ -50,10 +80,50 @@ input {
     transition: opacity 0.5s ease;
 }
 
+.search-hint {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.show-hint .search-hint {
+    opacity: 1;
+}
+
 .search-clear {
     cursor: pointer;
 }
 
-.loading .search-clear {
+.has-results .search-clear,
+.loading .spinner {
     opacity: 1;
+}
+
+.loading .search-hint {
+    opacity: 0;
+}
+
+.images img {
+    opacity: 0;
+    transform: rotate(0deg) scale(0);
+    transition: all 0.5s ease;
+}
+
+.images img.visible:nth-child(1n) {
+    opacity: 1;
+    transform: rotate(10deg) scale(1);
+}
+
+.images img.visible:nth-child(2n) {
+    opacity: 1;
+    transform: rotate(-5deg) scale(1);
+}
+
+.images img.visible:nth-child(3n) {
+    opacity: 1;
+    transform: rotate(-10deg) scale(1);
+}
+
+.images img.visible:nth-child(4n) {
+    opacity: 1;
+    transform: rotate(6deg) scale(1);
 }
