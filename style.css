@@ -1,8 +1,15 @@
+@font-face {
+    font-family: 'CabinetGrotesk Extrabold';
+    src: url('assets/fonts/CabinetGrotesk-Extrabold.woff2') format('woff2'),
+    url('assets/fonts/CabinetGrotesk-Extrabold.woff') format('woff'),
+    url('assets/fonts/CabinetGrotesk-Extrabold.ttf') format('truetype');
+}
+
 body {
-    background-color: #000000;
-    color: #FFFFFF;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
-    font-size: 24px;
+    background-color: #F0E49D;
+    color: #040109;
+    font-family: 'CabinetGrotesk Extrabold',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    font-size: 16px;
     line-height: 1.5;
     padding: 5vh 3vw;
     font-weight: bold;
@@ -20,6 +27,7 @@ body {
     margin-bottom: 0;
     opacity: 1;
     transition: opacity 0.5s ease;
+    pointer-events: none;
 }
 
 .has-results .title {
@@ -31,7 +39,7 @@ input {
     border: none;
     outline: none;
     padding: 0;
-    color: #FFFFFF;
+    color: #040109;
     text-align: center;
 }
 
@@ -65,15 +73,19 @@ input {
 }
 
 .search-input {
-    font-size: 72px;
+    font-size: 4.5rem;
     font-weight: 700;
+    text-transform: lowercase;
 }
 
 .search-input::placeholder {
-    color: #323232;
+    color: #ABA47C;
 }
 
-.search-clear,
+.search-clear {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
 .spinner {
     opacity: 0;
     pointer-events: none;
@@ -85,8 +97,13 @@ input {
     transition: opacity 0.5s ease;
 }
 
-.show-hint .search-hint {
+.show-hint .search-hint,
+.error .search-hint {
     opacity: 1;
+}
+
+.error .search-hint {
+    animation: error 0.6s ease-in-out forwards;
 }
 
 .search-clear {
@@ -98,32 +115,32 @@ input {
     opacity: 1;
 }
 
+.error .spinner {
+    opacity: 0;
+}
+
 .loading .search-hint {
     opacity: 0;
 }
 
 .images img {
     opacity: 0;
-    transform: rotate(0deg) scale(0);
+    transform: rotate(0);
     transition: all 0.5s ease;
 }
 
-.images img.visible:nth-child(1n) {
+.images img.visible {
     opacity: 1;
-    transform: rotate(10deg) scale(1);
+    box-shadow: 0px 5px 10px rgb(0 0 0 / 30%);
 }
 
-.images img.visible:nth-child(2n) {
-    opacity: 1;
-    transform: rotate(-5deg) scale(1);
-}
+@media (max-width: 550px) {
+    .search-input {
+        font-size: 2.5rem;
+    }
 
-.images img.visible:nth-child(3n) {
-    opacity: 1;
-    transform: rotate(-10deg) scale(1);
-}
-
-.images img.visible:nth-child(4n) {
-    opacity: 1;
-    transform: rotate(6deg) scale(1);
+    .images img {
+        max-width: 250px;
+        max-height: 250px;
+    }
 }

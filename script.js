@@ -1,11 +1,17 @@
 const API_KEY = 'OaQKrnmkTw9Rd9eq2JUaH5F4CuU9kM5s';
 
+const searchElement = document.querySelector('.search-input');
+const hintElement = document.querySelector('.search-hint');
+const clearElement = document.querySelector('.search-clear');
+
+const imageContainer = document.querySelector('.middle .images');
+
+searchElement.focus();
+
 const randomChoice = (arr) => {
     const randIndex = Math.floor(Math.random() * arr.length);
     return arr[randIndex];
 }
-
-const imageContainer = document.querySelector('.middle .images');
 
 const removeImage = (imagePosition) => {
     let imageIndex = 0;
@@ -20,7 +26,8 @@ const removeImage = (imagePosition) => {
 
 const searchGiphy = (searchTerm) => {
     toggleLoading(true);
-    let url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&limit=150&offset=0&rating=pg-13&lang=en`;
+    toggleError(false);
+    let url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${searchTerm}&limit=150&offset=0&rating=r&lang=en`;
     fetch(url)
     .then(response => response.json())
     .then(json => {
@@ -39,7 +46,9 @@ const searchGiphy = (searchTerm) => {
 
     })
     .catch(error => {
-        console.log('Nothing here');
+        toggleError(true);
+        toggleLoading(false);
+        hintElement.innerText = `nothing found 💩💩💩`;
     });
 }
 
@@ -49,10 +58,15 @@ const toggleLoading = (state) => {
     } else {
         document.body.classList.remove('loading');
     }
-    
 }
 
-//
+const toggleError = (state) => {
+    if(state) {
+        document.body.classList.add('error');
+    } else {
+        document.body.classList.remove('error');
+    }
+}
 
 const createVideo = src => {
     const video = document.createElement('video');
@@ -68,30 +82,26 @@ const createImage = src => {
     image.src = src;
     image.className = 'giphy-img';
 
-/*     const randomNum = Math.random() * 25;
+    const randomNum = Math.random() * 25;
     const posOrNeg = Math.random() < 0.5 ? -1 : 1;
 
     let randomDeg = Math.floor(randomNum * posOrNeg);
 
-    image.style = `transform: rotateZ(${randomDeg}deg)`; */
+    image.style = `transform: scale(1) rotate(${randomDeg}deg)`;
 
     return image;
 }
 
-//
-const searchElement = document.querySelector('.search-input');
-const hintElement = document.querySelector('.search-hint');
-
 const doSearch = (e) => {
     const searchTerm = searchElement.value;
 
-    if(searchTerm.length > 2) {
+    if(searchTerm.length >= 2) {
         hintElement.innerText = `Hit enter to search ${searchTerm}`;
         document.body.classList.add("show-hint");
     } else {
         document.body.classList.remove("show-hint");
     }
-    if(e.key === 'Enter' && searchElement.value.length > 2) {
+    if(e.key === 'Enter' && searchElement.value.length >= 2) {
         searchGiphy(searchTerm);
         let loadedImages = document.querySelectorAll('img.giphy-img');
         if(loadedImages.length > 25) {
@@ -100,9 +110,29 @@ const doSearch = (e) => {
     }
 }
 
+const resetGifStack = (event) => {
+    event.preventDefault();
+    searchElement.value = '';
+    imageContainer.innerHTML = '';
+    document.body.classList.remove('has-results');
+    document.body.classList.remove('show-hint');
+}
+
 searchElement.addEventListener('keyup', doSearch);
 document.addEventListener('keyup', e => {
     if(e.key === 'Escape') {
+        resetGifStack(e);
+    }
+
+    if(e.key === 'ArrowLeft') {
         removeImage('last');
     }
+})
+
+clearElement.addEventListener('click', (e) => {
+    resetGifStack(e);
+})
+
+document.addEventListener('click', () => {
+    searchElement.focus();
 })
