@@ -1,4 +1,4 @@
-const API_KEY = 'OaQKrnmkTw9Rd9eq2JUaH5F4CuU9kM5s';
+const API_KEY = 'INSERT_API_KEY_HERE';
 
 const searchElement = document.querySelector('.search-input');
 const hintElement = document.querySelector('.search-hint');
